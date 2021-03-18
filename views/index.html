@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhea Weather</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/bce72c0afa.js" crossorigin="anonymous"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7QilMtURU16qMmBklIqYKCTZVdHQECaQ&libraries&libraries=places&callback=placeSearch"></script>
+    <!-- custom styles -->
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body>
+    <div class="main-section">
+        <!-- navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="logo navbar-brand" href="#">RheaWeather</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation-menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navigation-menu">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active"><a class="nav-link" href="#">Maps</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Video</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Severe Weather</a></li>
+                </ul>
+                <div>
+                    <a href="#"><i class="fas fa-cog setting-icon"></i></a>
+                </div>
+                
+            </div>
+        </nav>
+        <!-- header -->
+        <div class="main-header">
+            <div class="input-container">
+                <form action="/result" method="post">
+                    <input class="main-input" id="autocomplete" type="text" name="city_query" placeholder="Search location, zip...">
+                    <button type="submit" class="sub-search"><i class="fas fa-search search-icon"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+
+            function placeSearch() {
+                var input = document.getElementById('autocomplete');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+            }
+
+        </script>
+    </div>
+</body>
+</html>

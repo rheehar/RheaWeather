@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhea Weather</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- Font awesome -->
+    <script src="https://kit.fontawesome.com/bce72c0afa.js" crossorigin="anonymous"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7QilMtURU16qMmBklIqYKCTZVdHQECaQ&libraries&libraries=places&callback=placeSearch"></script>
+    <!-- custom styles -->
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+<body class="result-home">
+    <div class="result-nav">
+        <!-- navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="logo-r navbar-brand" href="/">RheaWeather</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation-menu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+    </div>
+
+    <div class="lower-nav">
+        <div class="location-result">
+            <span><%= location %></span>
+        </div>
+    </div>
+
+    <div class="result-main-section">
+        <div class="weather-period">
+            <a href="#now">Now</a>
+        </div>
+
+        <a class="cur-con-weather-card today" id="now" href="#">
+            <div class="cur-con-weather-card__body">
+                <div class="cur-con-weather-card__panel">
+                    <h2 class="cur-con-weather-card__title">
+                        Current Weather
+                    </h2>
+                    <p class="cur-con-weather-card__subtitle">
+                        <%= localTime %>
+                    </p>
+                    <div class="forecast-container">
+                        <img class="weather-icon" src="<%= iconUrl %>" width="88" height="88">
+                        <div class="temp-container">
+                            <div class="temp"><%= Math.round(currTemp) %>°<span class="after-temp">C</span></div>
+                            <div class="real-feel">
+                                RealFeel®
+                                <%= Math.round(currFeels) %>°
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cur-con-weather-card__panel .details-container">
+                    
+                    <div class="spaced-content detail">
+                        <span class="label">Humidity</span>
+                        <span class="value" style="color: #00E39B"><%= currHumidity %>%</span>
+                    </div>
+                    <div class="spaced-content detail">
+                        <span class="label">Wind</span>
+                        <span class="value"><%= currWindSpeed %> km/h</span>
+                    </div>
+                    <div class="spaced-content detail">
+                        <span class="label">Wind Degree</span>
+                        <span class="value"><%= windDeg %></span>
+                    </div>
+                </div>
+            </div>
+            <div class="spaced-content">
+                <span class="phrase"><%= currDescription %></span>
+            </div>
+        </a>
+
+        <div class="weather-period">
+            <a href="#daily">Daily</a>
+        </div>
+
+
+   <div id="daily">
+       <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <!-- <i class="temp-icon fas fa-cloud-sun"></i> -->
+        <img src="http://openweathermap.org/img/wn/<%= daily[0].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"> <%= Math.round(daily[0].temp.day) %> °</span>
+            <span class="low">/ <%= Math.round(daily[0].temp.night) %> °</span>
+        </div>
+        <span class="temp-text"><%= daily[0].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[0].pop %>%</p>
+        </div>
+    </a>
+
+    <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <img src="http://openweathermap.org/img/wn/<%= daily[1].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"><%= Math.round(daily[1].temp.day) %>°</span>
+            <span class="low">/ <%= Math.round(daily[1].temp.night) %>°</span>
+        </div>
+        <span class="temp-text"><%= daily[1].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[1].pop %>%</p>
+        </div>
+    </a>
+
+    <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <img src="http://openweathermap.org/img/wn/<%= daily[2].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"><%= Math.round(daily[2].temp.day) %>°</span>
+            <span class="low">/ <%= Math.round(daily[2].temp.night) %>°</span>
+        </div>
+        <span class="temp-text"><%= daily[2].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[2].pop %>%</p>
+        </div>
+    </a>
+
+    <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <img src="http://openweathermap.org/img/wn/<%= daily[3].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"><%= Math.round(daily[3].temp.day) %>°</span>
+            <span class="low">/ <%= Math.round(daily[3].temp.night) %>°</span>
+        </div>
+        <span class="temp-text"><%= daily[3].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[3].pop %>%</p>
+        </div>
+    </a>
+
+
+    <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <img src="http://openweathermap.org/img/wn/<%= daily[4].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"><%= Math.round(daily[4].temp.day) %>°</span>
+            <span class="low">/ <%= Math.round(daily[4].temp.night) %>°</span>
+        </div>
+        <span class="temp-text"><%= daily[4].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[4].pop %>%</p>
+        </div>
+    </a>
+
+    <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <img src="http://openweathermap.org/img/wn/<%= daily[5].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"><%= Math.round(daily[5].temp.day) %>°</span>
+            <span class="low">/ <%= Math.round(daily[5].temp.night) %>°</span>
+        </div>
+        <span class="temp-text"><%= daily[5].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[5].pop %>%</p>
+        </div>
+    </a>
+
+    <a class="temperature-list" href="#">
+        <div class="date">
+            <p>Wed</p>
+            <p>1/15</p>
+        </div>
+        <img src="http://openweathermap.org/img/wn/<%= daily[6].weather[0].icon %>@2x.png" class="temp-icon">
+        <div class="temp">
+            <span class="high"><%= Math.round(daily[6].temp.day) %>°</span>
+            <span class="low">/ <%= Math.round(daily[6].temp.night) %>°</span>
+        </div>
+        <span class="temp-text"><%= daily[6].weather[0].description %></span>
+        <div class="info-percipitation">
+            <p>Percip</p>
+            <p><%= daily[6].pop %>%</p>
+        </div>
+    </a>
+</div>
+</div>
+
+
+<script>
+
+    function placeSearch() {
+        var input = document.getElementById('autocomplete');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+    }
+
+</script>
+</body>
+</html>
