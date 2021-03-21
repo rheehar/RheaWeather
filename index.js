@@ -93,8 +93,12 @@ function convertFromTimeStamp(timeStamp) {
   };
 }
 function timeConverter(currTime) {
-  const getDate = new Date(currTime * 1000);
-  const localTime = getDate.getHours() + ":" + getDate.getMinutes();
+  const newDate = fromUnixTime(currTime);
+  const localTime =
+    format(newDate, "hh") +
+    ":" +
+    format(newDate, "mm") +
+    format(newDate, "aaa");
   return localTime;
 }
 app.listen(process.env.PORT || 3000, function () {
