@@ -3,23 +3,24 @@ const bodyParser = require("body-parser");
 const env = require("dotenv").config();
 const axios = require("axios");
 const ejs = require("ejs");
+const apikey_g = process.env.apikey_g;
 //import {handleResult} from "./handlers"
+const { format, fromUnixTime } = require("date-fns");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-
 app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/views/index.html");
+  res.render(__dirname + "/views/index.ejs", {
+    apikey: apikey_g,
+  });
 });
-
 app.post("/result", handleResult);
 
 function handleResult(req, res) {
   const query = req.body.city_query;
-  const apikey_g = process.env.apikey_g;
   const url2 = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${apikey_g}`;
 
   axios
@@ -37,46 +38,61 @@ function handleResult(req, res) {
     const location = data.results[0].formatted_address;
 
     const apiKey = process.env.apiKey;
-    const units = "metric";
+    const units = "imperial";
     const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely&units=${units}&appid=${apiKey}`;
     const response = await axios.get(url);
-    const weatherData = response.data;
-    const currTemp = weatherData.current.temp;
-    const currTime = weatherData.current.dt;
-    const windDeg = weatherData.current.wind_deg;
-    const getDate = new Date(currTime * 1000);
-    const localTime = getDate.getHours() + ":" + getDate.getMinutes();
-    const currFeels = weatherData.current.feels_like;
-    const currDescription = weatherData.current.weather[0].description;
-    const currWindSpeed = weatherData.current.wind_speed;
-    const currWindGust = weatherData.current.wind_gust;
-    const currTempIcon = weatherData.current.weather[0].icon;
+    const {
+      daily,
+      current: {
+        temp: currTemp,
+        dt: currTime,
+        wind_deg: windDeg,
+        feels_like: currFeels,
+        wind_speed: currWindSpeed,
+        wind_gust: currWindGust,
+        humidity: currHumidity,
+        weather,
+      },
+    } = response.data;
+    const localTime = timeConverter(currTime);
+    const { description: currDescription, icon: currTempIcon } = weather[0];
     const iconUrl =
       "http://openweathermap.org/img/wn/" + currTempIcon + "@2x.png";
-    const currHumidity = weatherData.current.humidity;
-    const pressure = weatherData.current.pressure;
-    const visibility = weatherData.current.visibility;
-
-    console.log(localTime);
-
-    const daily = weatherData.daily;
-
-    res.render("result", {
-      daily: daily,
-      location: location,
-      currTemp: currTemp,
-      currFeels: currFeels,
-      currWindSpeed: currWindSpeed,
-      currDescription: currDescription,
-      iconUrl: iconUrl,
-      currWindGust: currWindGust,
-      currHumidity: currHumidity,
-      localTime: localTime,
-      windDeg: windDeg,
+    const newDaily = daily.map((item) => {
+      const newDate = convertFromTimeStamp(item.dt);
+      return { ...item, ...newDate };
     });
+    const result = {
+      daily: newDaily,
+      location,
+      currTemp,
+      currFeels,
+      currWindSpeed,
+      currDescription,
+      iconUrl,
+      currWindGust,
+      currHumidity,
+      localTime,
+      windDeg,
+    };
+
+    res.render("result", result);
   }
 }
 
+function convertFromTimeStamp(timeStamp) {
+  const date = fromUnixTime(timeStamp);
+  return {
+    dayOfWeek: format(date, "eee"),
+    month: format(date, "MMM"),
+    day: format(date, "dd"),
+  };
+}
+function timeConverter(currTime) {
+  const getDate = new Date(currTime * 1000);
+  const localTime = getDate.getHours() + ":" + getDate.getMinutes();
+  return localTime;
+}
 app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
