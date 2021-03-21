@@ -40,7 +40,9 @@ function handleResult(req, res) {
     const apiKey = process.env.apiKey;
     const units = "imperial";
     const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely&units=${units}&appid=${apiKey}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url).catch((e) => {
+      console.log(e);
+    });
     const {
       daily,
       current: {
@@ -54,6 +56,7 @@ function handleResult(req, res) {
         weather,
       },
     } = response.data;
+
     const localTime = timeConverter(currTime);
     const { description: currDescription, icon: currTempIcon } = weather[0];
     const iconUrl =
@@ -62,6 +65,7 @@ function handleResult(req, res) {
       const newDate = convertFromTimeStamp(item.dt);
       return { ...item, ...newDate };
     });
+
     const result = {
       daily: newDaily,
       location,
