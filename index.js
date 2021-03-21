@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const env = require("dotenv").config();
 const axios = require("axios");
 const ejs = require("ejs");
-const apikey_g = process.env.apikey_g;
+const apikey_g = process.env.APIKEY_G;
 //import {handleResult} from "./handlers"
 const { format, fromUnixTime } = require("date-fns");
 
@@ -37,7 +37,7 @@ function handleResult(req, res) {
     const lon = data.results[0].geometry.location.lng;
     const location = data.results[0].formatted_address;
 
-    const apiKey = process.env.apiKey;
+    const apiKey = process.env.APIKEY;
     const units = "imperial";
     const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,minutely&units=${units}&appid=${apiKey}`;
     const response = await axios.get(url).catch((e) => {
